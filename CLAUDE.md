@@ -84,6 +84,7 @@ verify:     npm run verify     (todo lo anterior en orden)
 - **Ayuda de campo en tooltip, no bajo el control.** `Field` recibe `hint` y lo muestra en un tooltip dentro del label (`HintTooltip`); `FieldRow` alinea label, control y error de toda la fila con `grid-rows-subgrid`. El botón de ayuda añade `aria-label="Ayuda sobre X"`, así que los selectores por label en tests deben ir anclados (`/^Celular/`).
 - **Tras enviar, dos salidas**: `FormStatus` muestra "Enviar otro mensaje" (remonta el formulario con `useFormReset`, que cambia la `key`) y "Volver al inicio".
 - **Página de entidad del fundador** (`/ivan-gonzalez`): concentra las búsquedas por su nombre con `Person` + `ProfilePage` JSON-LD y `alternateName` con las variantes reales de escritura. El `@id` del fundador se referencia desde `LegalService` en todo el sitio. Los datos viven en `site.founder`.
+- **`.npmrc` con `legacy-peer-deps=true`, versionado.** Vitest 5 pide un peer opcional `@types/node ^22 || >=24` y el proyecto fija `^20`, que es el runtime de desarrollo; el choque es solo de tipos. El archivo tiene que estar en el repo porque Vercel instala con `npm install` sin flags: sin el, el despliegue cae con ERESOLVE. `engines.node` es un rango acotado (`20.x || 22.x`) para que Vercel no avise de que un rango abierto se actualizaria solo al salir un major nuevo.
 - **Formato con Prettier** (`.prettierrc`, printWidth 110, plugin de Tailwind). Correr `npx prettier --write` antes de cerrar una tarea.
 
 ## Estructura

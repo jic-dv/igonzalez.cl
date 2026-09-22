@@ -7,54 +7,54 @@ Stack: Next.js 16.3 (App Router, Turbopack, React Compiler) · React 19.2 · Typ
 ## Arranque
 
 ```bash
-npm install --legacy-peer-deps
+npm install
 cp .env.example .env.local
 npm run dev
 ```
 
-`--legacy-peer-deps` es necesario por un bug de npm 10.8 con los peers opcionales de Vitest 5. No afecta al lockfile ni a producción.
+El repo trae un `.npmrc` con `legacy-peer-deps=true`: Vitest 5 declara un peer opcional `@types/node ^22 || >=24` y el proyecto fija `^20`, que es el runtime real. Es un conflicto solo de tipos y no afecta al árbol instalado. Tiene que estar en el repo porque Vercel instala con `npm install` sin flags y si no falla con ERESOLVE.
 
 El servidor de desarrollo corre en `http://localhost:3210`.
 
 ## Comandos
 
-| Comando | Qué hace |
-|---------|----------|
-| `npm run dev` | Servidor de desarrollo (Turbopack) |
-| `npm run build` | Build de producción |
-| `npm run typecheck` | `tsc --noEmit` en modo strict |
-| `npm run lint` | ESLint (Next + TypeScript + jsx-a11y strict) |
-| `npm run test` | Vitest: schemas, formatters, rate limit, magic bytes, formulario de contacto |
-| `npm run e2e` | Playwright contra el build de producción: SEO/SSR, cabeceras, formulario, axe, teclado, CLS |
-| `npm run budget` | Mide el JS de cliente por ruta (requiere `next start -p 3211` corriendo) |
-| `npm run verify` | Todo lo anterior en orden |
-| `npm run assets:fetch` | Vuelve a descargar y normalizar las fotos desde el sitio actual |
-| `npm run contrast` | Mide el contraste WCAG de la paleta |
+| Comando                | Qué hace                                                                                    |
+| ---------------------- | ------------------------------------------------------------------------------------------- |
+| `npm run dev`          | Servidor de desarrollo (Turbopack)                                                          |
+| `npm run build`        | Build de producción                                                                         |
+| `npm run typecheck`    | `tsc --noEmit` en modo strict                                                               |
+| `npm run lint`         | ESLint (Next + TypeScript + jsx-a11y strict)                                                |
+| `npm run test`         | Vitest: schemas, formatters, rate limit, magic bytes, formulario de contacto                |
+| `npm run e2e`          | Playwright contra el build de producción: SEO/SSR, cabeceras, formulario, axe, teclado, CLS |
+| `npm run budget`       | Mide el JS de cliente por ruta (requiere `next start -p 3211` corriendo)                    |
+| `npm run verify`       | Todo lo anterior en orden                                                                   |
+| `npm run assets:fetch` | Vuelve a descargar y normalizar las fotos desde el sitio actual                             |
+| `npm run contrast`     | Mide el contraste WCAG de la paleta                                                         |
 
 ## Variables de entorno
 
-| Variable | Uso |
-|----------|-----|
-| `IGONZALEZ_API_URL` | Backend de la oficina. Por defecto `https://api.igonzalez.cl/api`; cambiar solo para staging |
+| Variable              | Uso                                                                                                |
+| --------------------- | -------------------------------------------------------------------------------------------------- |
+| `IGONZALEZ_API_URL`   | Backend de la oficina. Por defecto `https://api.igonzalez.cl/api`; cambiar solo para staging       |
 | `API_DELIVERY_IN_DEV` | `1` para que en desarrollo los formularios se envíen de verdad al backend (por defecto se simulan) |
-| `E2E_MOCK_DELIVERY` | `1` en Playwright y CI: simula la entrega en el build de producción |
+| `E2E_MOCK_DELIVERY`   | `1` en Playwright y CI: simula la entrega en el build de producción                                |
 
 Se validan con Zod al arrancar en `src/shared/lib/env.ts`. Ninguna variable lleva prefijo `NEXT_PUBLIC_`: el cliente no recibe configuración.
 
 ## Qué cambió respecto al sitio actual
 
-| Eje | Sitio actual | Este proyecto |
-|-----|--------------|---------------|
-| Renderizado | SPA Vite: HTML de 480 bytes, contenido solo con JavaScript | Server Components: todo el contenido en el HTML inicial |
-| Rutas | `/about`, `/contacto`, `/faq`, `/reclamos`, `/postulacion` responden `AccessDenied` al acceso directo | Rutas reales con redirección 308 desde las antiguas |
-| Metadata | `title: IGonzalez`, sin description, canonical ni OG, `lang="en"` | Metadata API completa por ruta, `lang="es-CL"`, OG image generada |
-| Datos estructurados | Ninguno | `LegalService`, `WebSite`, `BreadcrumbList`, `ItemList` de `Person`, `FAQPage` |
-| Imágenes | Logo PNG 5262x802 px; retratos JPG de 2500x3000 px sin redimensionar | `next/image` con AVIF/WebP, `sizes` por contexto, retratos normalizados a 1200 px |
-| Contraste | Botones verde WhatsApp `#25D366` con texto blanco: 2.4:1 | Paleta OKLCH medida: mínimo 4.6:1 en texto, verde WhatsApp accesible 5.5:1 |
-| Seguridad | Sin cabeceras | CSP con nonce, HSTS preload, nosniff, frame-ancestors none, Referrer-Policy, Permissions-Policy, COOP |
-| Formularios | Sin validación en servidor visible | Zod en Server Actions, honeypot, tiempo mínimo, rate limit, CV verificado por magic bytes, consentimiento registrado con versión y fecha |
-| Legal | Sin política de privacidad, términos ni cookies | Tres documentos versionados, enlazados en el footer, consentimiento explícito por formulario |
-| Accesibilidad | Sin skip link, foco no gestionado en menú | WCAG 2.2 AA: axe en CI, teclado, foco visible, `prefers-reduced-motion`, menú móvil con foco gestionado |
+| Eje                 | Sitio actual                                                                                          | Este proyecto                                                                                                                            |
+| ------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Renderizado         | SPA Vite: HTML de 480 bytes, contenido solo con JavaScript                                            | Server Components: todo el contenido en el HTML inicial                                                                                  |
+| Rutas               | `/about`, `/contacto`, `/faq`, `/reclamos`, `/postulacion` responden `AccessDenied` al acceso directo | Rutas reales con redirección 308 desde las antiguas                                                                                      |
+| Metadata            | `title: IGonzalez`, sin description, canonical ni OG, `lang="en"`                                     | Metadata API completa por ruta, `lang="es-CL"`, OG image generada                                                                        |
+| Datos estructurados | Ninguno                                                                                               | `LegalService`, `WebSite`, `BreadcrumbList`, `ItemList` de `Person`, `FAQPage`                                                           |
+| Imágenes            | Logo PNG 5262x802 px; retratos JPG de 2500x3000 px sin redimensionar                                  | `next/image` con AVIF/WebP, `sizes` por contexto, retratos normalizados a 1200 px                                                        |
+| Contraste           | Botones verde WhatsApp `#25D366` con texto blanco: 2.4:1                                              | Paleta OKLCH medida: mínimo 4.6:1 en texto, verde WhatsApp accesible 5.5:1                                                               |
+| Seguridad           | Sin cabeceras                                                                                         | CSP con nonce, HSTS preload, nosniff, frame-ancestors none, Referrer-Policy, Permissions-Policy, COOP                                    |
+| Formularios         | Sin validación en servidor visible                                                                    | Zod en Server Actions, honeypot, tiempo mínimo, rate limit, CV verificado por magic bytes, consentimiento registrado con versión y fecha |
+| Legal               | Sin política de privacidad, términos ni cookies                                                       | Tres documentos versionados, enlazados en el footer, consentimiento explícito por formulario                                             |
+| Accesibilidad       | Sin skip link, foco no gestionado en menú                                                             | WCAG 2.2 AA: axe en CI, teclado, foco visible, `prefers-reduced-motion`, menú móvil con foco gestionado                                  |
 
 ## Sistema de diseño
 
@@ -69,13 +69,13 @@ Se validan con Zod al arrancar en `src/shared/lib/env.ts`. Ninguna variable llev
 
 Presupuesto medido con `scripts/bundle-budget.mjs` (JS comprimido transferido, contexto sin caché):
 
-| Ruta | Medido | Presupuesto |
-|------|--------|-------------|
-| `/` | 213.8 KB | 220 KB |
-| `/ivan-gonzalez` | 211.4 KB | 220 KB |
-| `/equipo` | 210.6 KB | 220 KB |
-| `/nosotros`, `/preguntas-frecuentes` | 205.5 KB | 220 KB |
-| `/contacto`, `/trabaja-con-nosotros` | 232.9 KB | 240 KB |
+| Ruta                                 | Medido   | Presupuesto |
+| ------------------------------------ | -------- | ----------- |
+| `/`                                  | 213.8 KB | 220 KB      |
+| `/ivan-gonzalez`                     | 211.4 KB | 220 KB      |
+| `/equipo`                            | 210.6 KB | 220 KB      |
+| `/nosotros`, `/preguntas-frecuentes` | 205.5 KB | 220 KB      |
+| `/contacto`, `/trabaja-con-nosotros` | 232.9 KB | 240 KB      |
 
 El piso de Next 16.3 + React 19.2 (react-dom 70.6 KB, runtime del App Router 44.8 KB, chunks compartidos 45 KB) es de 160 KB gz. `motion` en modo ligero (`LazyMotion` + `domAnimation`) suma 50 KB gz medidos con Turbopack: es una decisión explícita del cliente para las animaciones de aparición. React Hook Form suma 15 KB gz en las dos rutas con formulario, a petición del cliente; se usa sin `zodResolver` para que Zod (94 KB) siga viviendo solo en el servidor. El código propio pesa entre 1 y 8 KB por ruta.
 

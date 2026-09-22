@@ -23,7 +23,7 @@ jobs:
           cache: npm
 
       # Instalacion reproducible: respeta el lockfile
-      - run: npm ci --legacy-peer-deps
+      - run: npm ci
 
       - name: Escaneo de secretos
         uses: gitleaks/gitleaks-action@v2
