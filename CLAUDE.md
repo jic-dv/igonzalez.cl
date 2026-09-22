@@ -85,6 +85,7 @@ verify:     npm run verify     (todo lo anterior en orden)
 - **Tras enviar, dos salidas**: `FormStatus` muestra "Enviar otro mensaje" (remonta el formulario con `useFormReset`, que cambia la `key`) y "Volver al inicio".
 - **Página de entidad del fundador** (`/ivan-gonzalez`): concentra las búsquedas por su nombre con `Person` + `ProfilePage` JSON-LD y `alternateName` con las variantes reales de escritura. El `@id` del fundador se referencia desde `LegalService` en todo el sitio. Los datos viven en `site.founder`.
 - **`.npmrc` con `legacy-peer-deps=true`, versionado.** Vitest 5 pide un peer opcional `@types/node ^22 || >=24` y el proyecto fija `^20`, que es el runtime de desarrollo; el choque es solo de tipos. El archivo tiene que estar en el repo porque Vercel instala con `npm install` sin flags: sin el, el despliegue cae con ERESOLVE. `engines.node` es un rango acotado (`20.x || 22.x`) para que Vercel no avise de que un rango abierto se actualizaria solo al salir un major nuevo.
+- **Una variable de entorno declarada sin valor vale como ausente** (`vacioEsAusente` en `shared/lib/env.ts`). Un `API_DELIVERY_IN_DEV=` en un `.env` o una casilla vacia en el panel de Vercel llegan como cadena vacia, no como undefined, y tumbaban el build. `.env.example` esta versionado con una excepcion en `.gitignore` porque el README pide copiarlo al clonar.
 - **Formato con Prettier** (`.prettierrc`, printWidth 110, plugin de Tailwind). Correr `npx prettier --write` antes de cerrar una tarea.
 
 ## Estructura
