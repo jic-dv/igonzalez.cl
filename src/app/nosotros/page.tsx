@@ -62,12 +62,34 @@ export default async function NosotrosPage() {
                 <h2 id="socios-title" className="eyebrow text-muted">
                   Socios fundadores
                 </h2>
+                {/* La foto de los dos socios encabeza su propia tarjeta, que es donde aporta y
+                    donde no interrumpe la lectura de la historia. Va con width y height reales,
+                    sin recorte: asi no hay factor de ampliacion y sizes es el ancho de la caja. */}
+                <figure className="mt-5">
+                  <Media
+                    src="/fundadores/fundadores.webp"
+                    alt="Iván González Navarrete y Mauricio Acuña Agost, socios fundadores de IGonzalez"
+                    width={626}
+                    height={540}
+                    sizes="(min-width: 1024px) 22rem, (min-width: 640px) 32rem, 84vw"
+                    className="rounded-control h-auto w-full"
+                  />
+                </figure>
                 <ul className="mt-6 flex flex-col gap-6">
                   {founders.map((f) => (
                     <li key={f.slug} className="flex items-center gap-4">
                       <div className="rounded-control bg-ink-2 relative size-16 shrink-0 overflow-hidden">
                         {f.photo ? (
-                          <Media src={f.photo} alt={f.name} fill sizes="64px" className="object-[60%_20%]" />
+                          // El retrato de Ivan es apaisado y la caja cuadrada: object-cover lo
+                          // amplia ~1,5 veces el lado, asi que sizes declara 96px y no 64.
+                          <Media
+                            src={f.photo}
+                            alt={`${f.name}, socio fundador de IGonzalez`}
+                            fill
+                            sizes="96px"
+                            quality={90}
+                            className="object-[60%_20%]"
+                          />
                         ) : (
                           <span
                             className="font-display text-amber absolute inset-0 flex items-center justify-center text-xl"

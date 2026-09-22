@@ -1,6 +1,6 @@
-import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import HintTooltip from "@/shared/components/core/HintTooltip";
 import { cn } from "@/shared/lib/cn";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 export type FieldControlProps = {
   id: string;
@@ -108,21 +108,46 @@ export function Select({ className, children, ...rest }: ComponentPropsWithoutRe
 }
 
 // Casilla con area de toque amplia: el recuadro completo responde al clic.
+// Casilla propia en vez de la nativa: la del sistema no se puede redondear ni suavizar su
+// check. El input sigue siendo un checkbox real (solo se le quita la apariencia), asi que
+// teclado, formulario y lectores de pantalla funcionan igual.
 export function Checkbox({ className, children, ...rest }: ComponentPropsWithoutRef<"input">) {
   return (
     <label
       className={cn(
-        "rounded-control border-line has-checked:border-brand has-checked:bg-brand/5 hover:border-line-strong",
-        "duration-fast flex cursor-pointer items-start gap-3 border bg-white p-4 transition-colors",
+        "rounded-card border-line has-checked:border-brand has-checked:bg-brand/5 hover:border-line-strong",
+        "duration-fast flex cursor-pointer items-start gap-3.5 border bg-white p-4 transition-colors",
         "has-focus-visible:ring-brand/20 has-focus-visible:border-brand has-focus-visible:ring-4",
         className,
       )}
     >
-      <input
-        {...rest}
-        type="checkbox"
-        className="accent-brand mt-0.5 size-5 shrink-0 cursor-pointer rounded"
-      />
+      <span className="relative mt-px grid size-6 shrink-0 place-items-center">
+        <input
+          {...rest}
+          type="checkbox"
+          className={cn(
+            "peer border-line-strong checked:border-brand checked:bg-brand size-6 cursor-pointer appearance-none",
+            "duration-fast ease-standard rounded-lg border-2 bg-white transition-[background-color,border-color]",
+            "aria-invalid:border-error",
+          )}
+        />
+        {/* El check aparece creciendo desde el centro, no de golpe */}
+        <svg
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          className={cn(
+            "pointer-events-none absolute size-4 scale-50 text-white opacity-0",
+            "duration-fast ease-out-expo transition-[opacity,scale] peer-checked:scale-100 peer-checked:opacity-100",
+          )}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={3.5}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="m5 12.5 4.5 4.5L19 7" />
+        </svg>
+      </span>
       <span className="text-text text-sm leading-snug">{children}</span>
     </label>
   );

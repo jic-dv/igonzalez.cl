@@ -10,7 +10,7 @@ export const teamData = [
     role: "Socio fundador",
     whatsapp: "56988381428",
     photo: "/equipo/ivan-gonzalez.webp",
-    photoSize: [844, 572],
+    photoSize: [1524, 1032],
     featured: true,
   },
   {
@@ -18,6 +18,8 @@ export const teamData = [
     name: "Mauricio Acuña Agost",
     firstName: "Mauricio",
     role: "Socio fundador",
+    photo: "/equipo/mauricio-acuna.webp",
+    photoSize: [168, 168],
     featured: true,
   },
   {

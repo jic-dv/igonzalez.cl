@@ -126,7 +126,7 @@ export default function SiteHeader() {
           >
             <Image
               src={onInk ? "/marca/logo-white.png" : "/marca/logo.png"}
-              alt=""
+              alt="IGonzalez"
               title="IGonzalez, abogados especialistas en deudas"
               width={800}
               height={122}

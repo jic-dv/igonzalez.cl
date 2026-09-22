@@ -76,7 +76,7 @@ export default async function OpenGraphImage() {
         {/* eslint-disable-next-line @next/next/no-img-element -- satori solo renderiza <img> */}
         <img
           src={photoSrc}
-          alt=""
+          alt="Iván González Navarrete, abogado y fundador de IGonzalez"
           width={480}
           height={630}
           style={{ objectFit: "cover", objectPosition: "60% center" }}

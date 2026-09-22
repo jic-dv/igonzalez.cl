@@ -23,6 +23,7 @@ import {
 import { CV_ACCEPT, cvFileRule } from "@/features/contacto/validation/cv";
 import Field, { FieldRow, Input, Select, Textarea } from "@/shared/components/core/Field";
 import PhoneField from "@/shared/components/core/PhoneField";
+import { cn } from "@/shared/lib/cn";
 
 type Values = {
   nombreCompleto: string;
@@ -207,7 +208,14 @@ export default function PostulacionForm() {
               {...register("cv", { validate: toRhf(cvFileRule) })}
               type="file"
               accept={CV_ACCEPT}
-              className="file:bg-paper-2 file:text-ink hover:file:bg-line file:rounded-control file:mr-4 file:cursor-pointer file:border-0 file:px-4 file:py-2 file:font-semibold file:transition-colors"
+              // El boton nativo se recortaba: con el padding vertical del control no le
+              // cabia su propia altura. Va a ras del borde, a toda la altura del campo.
+              className={cn(
+                "cursor-pointer py-0 pr-4 pl-0 text-sm",
+                "file:bg-paper-2 file:text-ink hover:file:bg-line file:duration-fast file:mr-4 file:h-12",
+                "file:cursor-pointer file:rounded-l-[0.75rem] file:border-0 file:px-5 file:font-semibold",
+                "file:transition-colors",
+              )}
             />
           )}
         </Field>

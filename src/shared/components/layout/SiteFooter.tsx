@@ -1,9 +1,9 @@
-import Image from "next/image";
-import Reveal from "@/shared/components/core/Reveal";
-import Link from "next/link";
 import AppLink from "@/shared/components/core/AppLink";
 import Icon from "@/shared/components/core/Icon";
+import Reveal from "@/shared/components/core/Reveal";
 import { site, whatsappUrl } from "@/shared/lib/site";
+import Image from "next/image";
+import Link from "next/link";
 
 const columns = [
   {
@@ -142,12 +142,32 @@ export default function SiteFooter() {
           ))}
         </div>
 
-        <div className="text-on-ink-muted mt-14 flex flex-col gap-2 border-t border-white/10 pt-8 text-sm sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © {new Date().getFullYear()} IGonzalez.cl · {site.legalName} · RUT {site.rut}. Todos los derechos
-            reservados.
-          </p>
-          <p>Concepción, Chile.</p>
+        <div className="text-on-ink-muted mt-14 flex flex-col gap-6 border-t border-white/10 pt-8 text-sm sm:flex-row sm:items-center sm:justify-between">
+          {/* Credito de la agencia: discreto, con el logo apagado en reposo y a color al pasar
+              el cursor, para que no compita con la marca del cliente. La opacidad se aplica
+              solo al logo: sobre el texto bajaba el contraste de 4,5 a 4,06 y axe lo rechaza. */}
+          <a
+            href="https://podiochile.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Podio Chile, agencia que diseñó y desarrolló este sitio (se abre en una pestaña nueva)"
+            className="group duration-fast inline-flex shrink-0 items-center gap-2.5 transition-colors"
+          >
+            <span className="text-xs">Desarrollada por: </span>
+            <Image
+              src="/autor/logo-podio-chile.webp"
+              alt="Podio Chile"
+              title="Podio Chile"
+              width={1600}
+              height={300}
+              sizes="128px"
+              className="duration-fast ease-standard h-5 w-auto opacity-70 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
+            />
+          </a>
+
+          <div className="flex flex-col gap-2">
+            <p>© {new Date().getFullYear()} IGonzalez.cl. Todos los derechos reservados.</p>
+          </div>
         </div>
       </div>
     </footer>
