@@ -1,26 +1,190 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/*
+  Tokens de diseno. Todo color, radio, sombra y duracion vive aqui.
+  Paleta medida con scripts/contrast.mjs: todo par texto/fondo cumple WCAG AA.
+*/
+@theme {
+  --font-display: var(--font-source-serif), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+
+  --color-ink: oklch(0.21 0.12 268);
+  --color-ink-2: oklch(0.27 0.11 268);
+  --color-ink-3: oklch(0.34 0.1 268);
+  --color-brand: oklch(0.45 0.19 268);
+  --color-brand-hover: oklch(0.4 0.19 268);
+  --color-amber: oklch(0.82 0.16 75);
+  --color-amber-deep: oklch(0.54 0.14 62);
+  --color-paper: oklch(0.985 0.004 268);
+  --color-paper-2: oklch(0.96 0.008 268);
+  --color-line: oklch(0.9 0.012 268);
+  --color-line-strong: oklch(0.82 0.02 268);
+  --color-text: oklch(0.24 0.05 268);
+  --color-muted: oklch(0.47 0.04 268);
+  --color-on-ink: oklch(0.985 0.004 268);
+  --color-on-ink-muted: oklch(0.8 0.03 268);
+  --color-wa: oklch(0.5 0.14 155);
+  --color-wa-hover: oklch(0.45 0.14 155);
+  --color-error: oklch(0.52 0.2 25);
+
+  /* Colores oficiales de marca de las redes sociales (solo para sus iconos) */
+  --color-social-whatsapp: #25d366;
+  --color-social-tiktok: #000000;
+  --color-social-facebook: #1877f2;
+  --color-success: oklch(0.5 0.14 155);
+
+  --radius-card: 1.25rem;
+  --radius-control: 0.75rem;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 1px 2px oklch(0.21 0.12 268 / 0.06), 0 8px 24px -12px oklch(0.21 0.12 268 / 0.18);
+  --shadow-elevated: 0 2px 6px oklch(0.21 0.12 268 / 0.08), 0 24px 48px -16px oklch(0.21 0.12 268 / 0.28);
+
+  --duration-fast: 150ms;
+  --duration-enter: 220ms;
+  --duration-section: 400ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --container-content: 72rem;
+  --container-wide: 88rem;
+
+  /* Escala tipografica fluida: 360px -> 1440px */
+  --text-display-xl: clamp(2.75rem, 1.5rem + 5.5vw, 6rem);
+  --text-display-xl--line-height: 0.98;
+  --text-display-xl--letter-spacing: -0.03em;
+  --text-display-lg: clamp(2.25rem, 1.4rem + 3.6vw, 4.25rem);
+  --text-display-lg--line-height: 1.02;
+  --text-display-lg--letter-spacing: -0.025em;
+  --text-display-md: clamp(1.75rem, 1.2rem + 2.2vw, 3rem);
+  --text-display-md--line-height: 1.08;
+  --text-display-md--letter-spacing: -0.02em;
+  --text-display-sm: clamp(1.375rem, 1.1rem + 1.1vw, 1.875rem);
+  --text-display-sm--line-height: 1.15;
+  --text-display-sm--letter-spacing: -0.015em;
+  --text-lead: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+  --text-lead--line-height: 1.55;
+  --text-eyebrow: 0.8125rem;
+  --text-eyebrow--line-height: 1.2;
+  --text-eyebrow--letter-spacing: 0.14em;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: light;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--color-paper);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    text-rendering: optimizeLegibility;
+  }
+
+  a,
+  button:not(:disabled),
+  summary,
+  [role="button"] {
+    cursor: pointer;
+  }
+
+  ::selection {
+    background: var(--color-amber);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-brand);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  .on-ink :focus-visible {
+    outline-color: var(--color-amber);
+  }
+
+  /* Validacion nativa: marca el campo solo despues de que la persona interactuo */
+  input:user-invalid,
+  select:user-invalid,
+  textarea:user-invalid {
+    border-color: var(--color-error);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Degradado oficial de Instagram */
+@utility bg-social-instagram {
+  background: radial-gradient(
+    circle at 30% 107%,
+    #fdf497 0%,
+    #fdf497 5%,
+    #fd5949 45%,
+    #d6249f 60%,
+    #285aeb 90%
+  );
+}
+
+@utility font-display {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+}
+
+@utility eyebrow {
+  font-size: var(--text-eyebrow);
+  line-height: var(--text-eyebrow--line-height);
+  letter-spacing: var(--text-eyebrow--letter-spacing);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+/* Trazado de firma: la linea que tacha la deuda. pathLength=1 normaliza el dash. */
+@utility strike-path {
+  stroke: var(--color-amber);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  fill: none;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: strike-draw 500ms var(--ease-out-expo) forwards;
+}
+
+@keyframes strike-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .strike-path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
 }
